@@ -48,8 +48,9 @@ public class MainActivity extends Activity {
     private static final String SERVICE_ID = "com.cursoandroid.things";
     private static final String TAG = "Things:";
     private final String PIN_LED = "BCM18";
+    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF";
+
     public Gpio mLedGpio;
-    private Boolean ledStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,6 @@ public class MainActivity extends Activity {
         PeripheralManager perifericos = PeripheralManager.getInstance();
         Log.d("HomeActivity", "GPIO: " + perifericos.getGpioList());
         // Configuración del LED
-        ledStatus = false;
         PeripheralManager service = PeripheralManager.getInstance();
         try {
             mLedGpio = service.openGpio(PIN_LED);
@@ -127,10 +127,12 @@ public class MainActivity extends Activity {
         public void onPayloadReceived(String endpointId, Payload payload) {
             String message = new String(payload.asBytes());
             Log.i(TAG, "Se ha recibido una transferencia desde (" + endpointId + ") con el siguiente contenido: " + message);
-            disconnect(endpointId);
             switch (message) {
-                case "SWITCH":
-                    switchLED();
+                case ACTION_ON_LED:
+                    switchLED(true);
+                    break;
+                case ACTION_OFF_LED:
+                    switchLED(false);
                     break;
                 default:
                     Log.w(TAG, "No existe una acción asociada a este " + "mensaje.");
@@ -144,15 +146,13 @@ public class MainActivity extends Activity {
         }
     };
 
-    public void switchLED() {
+    public void switchLED(boolean on) {
         try {
-            if (ledStatus) {
-                mLedGpio.setValue(false);
-                ledStatus = false;
+            if (on) {
+                mLedGpio.setValue(true);
                 Log.i(TAG, "LED OFF");
             } else {
-                mLedGpio.setValue(true);
-                ledStatus = true;
+                mLedGpio.setValue(false);
                 Log.i(TAG, "LED ON");
             }
         } catch (IOException e) {
@@ -160,11 +160,13 @@ public class MainActivity extends Activity {
         }
     }
 
+    /*
     protected void disconnect(String endpointId) {
         Nearby.getConnectionsClient(this).disconnectFromEndpoint(endpointId);
         Log.i(TAG, "Desconectado del endpoint (" + endpointId + ").");
         startAdvertising();
     }
+    */
 
     @Override
     protected void onDestroy() {
