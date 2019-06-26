@@ -48,13 +48,15 @@ public class MainActivity extends Activity {
     private static final String SERVICE_ID = "com.cursoandroid.things";
     private static final String TAG = "Things:";
     private final String PIN_LED = "BCM18";
-    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF";
+    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF", REMOTE_ACTION = "REMOTE_ACTION";
 
     public Gpio mLedGpio;
+    private WifiUtils wifiutils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        wifiutils = new WifiUtils(this);
         PeripheralManager perifericos = PeripheralManager.getInstance();
         Log.d("HomeActivity", "GPIO: " + perifericos.getGpioList());
         // Configuración del LED
@@ -134,6 +136,9 @@ public class MainActivity extends Activity {
                 case ACTION_OFF_LED:
                     switchLED(false);
                     break;
+                case REMOTE_ACTION:
+                    doRemoteAction();
+                    break;
                 default:
                     Log.w(TAG, "No existe una acción asociada a este " + "mensaje.");
                     break;
@@ -158,6 +163,12 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             Log.e(TAG, "Error en el API PeripheralIO", e);
         }
+    }
+
+    private void doRemoteAction() {
+        wifiutils.connectToAP("PISO 3", "admin");
+        wifiutils.listNetworks();
+        wifiutils.getConnectionInfo();
     }
 
     /*

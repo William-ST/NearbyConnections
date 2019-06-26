@@ -85,14 +85,26 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+
         android:text="Off"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_on"
+        app:layout_constraintEnd_toStartOf="@+id/btn_remote_action"
         app:layout_constraintTop_toBottomOf="@+id/btn_disconnect" />
 
+    <Button
+        android:id="@+id/btn_remote_action"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Acción remota"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_off"
+        app:layout_constraintTop_toBottomOf="@+id/btn_disconnect"/>
 
     <ScrollView
         android:layout_width="0dp"

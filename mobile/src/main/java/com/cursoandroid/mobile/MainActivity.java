@@ -35,10 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     // Consejo: utiliza como SERVICE_ID el nombre de tu paquete
-    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF";
+    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF", REMOTE_ACTION = "REMOTE_ACTION";
     private static final String SERVICE_ID = "com.cursoandroid.things";
     private static final String TAG = "Mobile:";
-    private Button btnScan, btnConnect, btnOn, btnOff, btnDisconnect;
+    private Button btnScan, btnConnect, btnOn, btnOff, btnDisconnect, btnRemoteAction;
     private TextView tvDisplay, tvBalizaSelect;
     private BalizaAdapter balizaAdapter;
     private RecyclerView rvList;
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOn = findViewById(R.id.btn_on);
         btnOff = findViewById(R.id.btn_off);
         btnDisconnect = findViewById(R.id.btn_disconnect);
+        btnRemoteAction = findViewById(R.id.btn_remote_action);
         rvList = findViewById(R.id.rv_list);
 
         btnScan.setOnClickListener(this);
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOn.setOnClickListener(this);
         btnOff.setOnClickListener(this);
         btnDisconnect.setOnClickListener(this);
+        btnRemoteAction.setOnClickListener(this);
         restartBtn();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnConnect.setEnabled(false);
         btnOn.setEnabled(false);
         btnOff.setEnabled(false);
+        btnRemoteAction.setEnabled(false);
         btnDisconnect.setEnabled(false);
         tvDisplay.setText("Buscando...\n");
         Nearby.getConnectionsClient(this).startDiscovery(SERVICE_ID, mEndpointDiscoveryCallback,
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnConnect.setEnabled(false);
         btnOn.setEnabled(false);
         btnOff.setEnabled(false);
+        btnRemoteAction.setEnabled(false);
         btnDisconnect.setEnabled(false);
     }
 
@@ -161,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnConnect.setEnabled(false);
                     btnOn.setEnabled(true);
                     btnOff.setEnabled(true);
+                    btnRemoteAction.setEnabled(true);
                     btnDisconnect.setEnabled(true);
                     break;
                 case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
@@ -221,6 +226,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_disconnect:
                 disconnectNearby();
                 break;
+            case R.id.btn_remote_action:
+                actionRemote();
+                break;
             default:
                 break;
         }
@@ -256,11 +264,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sendData(selectBalizaModel.getId(), ACTION_OFF_LED);
     }
 
+    private void remoteAction() {
+        sendData(selectBalizaModel.getId(), REMOTE_ACTION);
+    }
+
     private void disconnectNearby() {
         Nearby.getConnectionsClient(this).disconnectFromEndpoint(selectBalizaModel.getId());
         restartBtn();
         tvBalizaSelect.setText("");
         selectBalizaModel = null;
+    }
+
+    private void actionRemote() {
+        tvDisplay.append("Acción remota WifiConfig...\n");
+        sendData(selectBalizaModel.getId(), REMOTE_ACTION);
     }
 
     @Override
