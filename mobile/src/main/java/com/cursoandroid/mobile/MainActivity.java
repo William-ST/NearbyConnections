@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF", REMOTE_ACTION = "REMOTE_ACTION";
     private static final String SERVICE_ID = "com.cursoandroid.things";
     private static final String TAG = "Mobile:";
-    private Button btnScan, btnConnect, btnOn, btnOff, btnDisconnect, btnRemoteAction;
+    private Button btnScan, btnConnect, btnOn, btnOff, btnDisconnect, btnConfigWifi, btnCleanConfigWifi;
     private TextView tvDisplay, tvBalizaSelect;
     private BalizaAdapter balizaAdapter;
     private RecyclerView rvList;
@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOn = findViewById(R.id.btn_on);
         btnOff = findViewById(R.id.btn_off);
         btnDisconnect = findViewById(R.id.btn_disconnect);
-        btnRemoteAction = findViewById(R.id.btn_remote_action);
+        btnConfigWifi = findViewById(R.id.btn_config_wifi);
+        btnCleanConfigWifi = findViewById(R.id.btn_clean_config_wifi);
         rvList = findViewById(R.id.rv_list);
 
         btnScan.setOnClickListener(this);
@@ -63,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOn.setOnClickListener(this);
         btnOff.setOnClickListener(this);
         btnDisconnect.setOnClickListener(this);
-        btnRemoteAction.setOnClickListener(this);
+        btnConfigWifi.setOnClickListener(this);
+        btnCleanConfigWifi.setOnClickListener(this);
         restartBtn();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -99,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnConnect.setEnabled(false);
         btnOn.setEnabled(false);
         btnOff.setEnabled(false);
-        btnRemoteAction.setEnabled(false);
+        btnConfigWifi.setEnabled(false);
+        btnCleanConfigWifi.setEnabled(false);
         btnDisconnect.setEnabled(false);
         tvDisplay.setText("Buscando...\n");
         Nearby.getConnectionsClient(this).startDiscovery(SERVICE_ID, mEndpointDiscoveryCallback,
@@ -127,7 +130,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnConnect.setEnabled(false);
         btnOn.setEnabled(false);
         btnOff.setEnabled(false);
-        btnRemoteAction.setEnabled(false);
+        btnConfigWifi.setEnabled(false);
+        btnCleanConfigWifi.setEnabled(false);
         btnDisconnect.setEnabled(false);
     }
 
@@ -165,7 +169,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnConnect.setEnabled(false);
                     btnOn.setEnabled(true);
                     btnOff.setEnabled(true);
-                    btnRemoteAction.setEnabled(true);
+                    btnConfigWifi.setEnabled(true);
+                    btnCleanConfigWifi.setEnabled(true);
                     btnDisconnect.setEnabled(true);
                     break;
                 case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
@@ -226,8 +231,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_disconnect:
                 disconnectNearby();
                 break;
-            case R.id.btn_remote_action:
-                actionRemote();
+            case R.id.btn_config_wifi:
+                openConfigWifi();
+                break;
+            case R.id.btn_clean_config_wifi:
+                cleanConfigWifi();
                 break;
             default:
                 break;
@@ -286,4 +294,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         selectBalizaModel = balizaModel;
         tvBalizaSelect.setText(selectBalizaModel.getName());
     }
+
+    private void openConfigWifi() {
+
+    }
+
+    private void cleanConfigWifi() {
+
+    }
+
 }

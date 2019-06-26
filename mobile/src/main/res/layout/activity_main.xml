@@ -21,7 +21,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,12 +30,12 @@
 
     <TextView
         android:id="@+id/tv_baliza_select"
-        app:layout_constraintTop_toBottomOf="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:gravity="center"
-        android:textSize="17sp"/>
+        android:textSize="17sp"
+        app:layout_constraintTop_toBottomOf="@+id/rv_list" />
 
     <Button
         android:id="@+id/btn_connect"
@@ -85,26 +85,41 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:text="Off"
         android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_on"
-        app:layout_constraintEnd_toStartOf="@+id/btn_remote_action"
         app:layout_constraintTop_toBottomOf="@+id/btn_disconnect" />
 
     <Button
-        android:id="@+id/btn_remote_action"
+        android:id="@+id/btn_config_wifi"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:text="Config Wifi"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@+id/btn_clean_config_wifi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_on" />
+
+    <Button
+        android:id="@+id/btn_clean_config_wifi"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Acción remota"
+        android:text="Clear Config Wifi"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_off"
-        app:layout_constraintTop_toBottomOf="@+id/btn_disconnect"/>
+        app:layout_constraintStart_toEndOf="@+id/btn_config_wifi"
+        app:layout_constraintTop_toBottomOf="@+id/btn_on" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -117,7 +132,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_off">
+        app:layout_constraintTop_toBottomOf="@+id/btn_clean_config_wifi">
 
         <TextView
             android:id="@+id/tv_display"
