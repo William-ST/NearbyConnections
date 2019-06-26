@@ -28,6 +28,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_scan" />
 
+    <TextView
+        android:id="@+id/tv_baliza_select"
+        app:layout_constraintTop_toBottomOf="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:textSize="17sp"/>
+
     <Button
         android:id="@+id/btn_connect"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -40,7 +49,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/btn_disconnect"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_list" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_baliza_select" />
 
     <Button
         android:id="@+id/btn_disconnect"
@@ -54,7 +63,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_connect"
-        app:layout_constraintTop_toBottomOf="@+id/rv_list" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_baliza_select" />
 
     <Button
         android:id="@+id/btn_on"
@@ -99,7 +108,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_off">
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/tv_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pulse el botón Scan para comenzar"
