@@ -35,7 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     // Consejo: utiliza como SERVICE_ID el nombre de tu paquete
-    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF", REMOTE_ACTION = "REMOTE_ACTION";
+    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF", REMOTE_ACTION = "REMOTE_ACTION",
+            ACTION_GET_CURRENT_NETWORK_INFO = "ACTION_GET_CURRENT_NETWORK_INFO",
+            ACTION_RESPONSE_CURRENT_NETWORK_INFO = "ACTION_RESPONSE_CURRENT_NETWORK_INFO";
+
     private static final String SERVICE_ID = "com.cursoandroid.things";
     private static final String TAG = "Mobile:";
     private Button btnScan, btnConnect, btnOn, btnOff, btnDisconnect, btnConfigWifi, btnCleanConfigWifi;
@@ -195,6 +198,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // En este ejemplo, el móvil no recibirá transmisiones de la RP3
         @Override
         public void onPayloadReceived(String endpointId, Payload payload) { // Payload recibido
+            String message = new String(payload.asBytes());
+            Log.i(TAG, "Se ha recibido una transferencia desde (" + endpointId + ") con el siguiente contenido: " + message);
+            switch (message) {
+                case ACTION_RESPONSE_CURRENT_NETWORK_INFO:
+
+                    break;
+            }
         }
 
         @Override
@@ -296,7 +306,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openConfigWifi() {
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(ConfigWifiDialogFragment.newInstance(), ConfigWifiDialogFragment.TAG)
+                .commitAllowingStateLoss();
     }
 
     private void cleanConfigWifi() {

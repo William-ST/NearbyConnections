@@ -21,7 +21,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Skeleton of an Android Things activity.
@@ -48,7 +51,9 @@ public class MainActivity extends Activity {
     private static final String SERVICE_ID = "com.cursoandroid.things";
     private static final String TAG = "Things:";
     private final String PIN_LED = "BCM18";
-    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF", REMOTE_ACTION = "REMOTE_ACTION";
+    private final static String ACTION_ON_LED = "ON", ACTION_OFF_LED = "OFF", REMOTE_ACTION = "REMOTE_ACTION",
+        ACTION_GET_CURRENT_NETWORK_INFO = "ACTION_GET_CURRENT_NETWORK_INFO",
+        ACTION_RESPONSE_CURRENT_NETWORK_INFO = "ACTION_RESPONSE_CURRENT_NETWORK_INFO";
 
     public Gpio mLedGpio;
     private WifiUtils wifiutils;
@@ -139,6 +144,10 @@ public class MainActivity extends Activity {
                 case REMOTE_ACTION:
                     doRemoteAction();
                     break;
+                case ACTION_GET_CURRENT_NETWORK_INFO:
+                    String currentInfoNetworkConnection = wifiutils.getConnectionInfo();
+                    sendData(ACTION_RESPONSE_CURRENT_NETWORK_INFO, currentInfoNetworkConnection);
+                    break;
                 default:
                     Log.w(TAG, "No existe una acción asociada a este " + "mensaje.");
                     break;
@@ -169,6 +178,17 @@ public class MainActivity extends Activity {
         wifiutils.connectToAP("PISO 3", "admin");
         wifiutils.listNetworks();
         wifiutils.getConnectionInfo();
+    }
+
+    private void sendData(String endpointId, JSONObject jsonObject) {
+        Payload data = null;
+        try {
+            data = Payload.fromBytes(jsonObject.toString().getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "Error en la codificación del mensaje.", e);
+        }
+        Nearby.getConnectionsClient(this).sendPayload(endpointId, data);
+        Log.i(TAG, "Mensaje enviado.");
     }
 
     /*

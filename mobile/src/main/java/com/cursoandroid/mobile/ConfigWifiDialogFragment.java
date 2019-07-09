@@ -12,12 +12,10 @@ import android.view.Window;
 
 public class ConfigWifiDialogFragment extends DialogFragment {
 
-    
+    public static final String TAG = ConfigWifiDialogFragment.class.getCanonicalName();
 
     public static ConfigWifiDialogFragment newInstance() {
-        
         Bundle args = new Bundle();
-        
         ConfigWifiDialogFragment fragment = new ConfigWifiDialogFragment();
         fragment.setArguments(args);
         return fragment;
