@@ -1,12 +1,12 @@
 package com.cursoandroid.things;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+
+import com.imgprocesadondk.interaction.NetworkInfoResponse;
 
 import java.util.List;
 
@@ -30,12 +30,12 @@ public class WifiUtils {
         Log.i(TAG, "Lista de redes configuradas:\n " + redes.toString());
     }
 
-    public String getConnectionInfo() {
-        Log.i(TAG, "Red actual: " + wifiManager.getConnectionInfo()
-                .toString());
-        return new String(wifiManager.getConnectionInfo().getSSID() + ", " +
-                wifiManager.getConnectionInfo().getLinkSpeed() + " Mbps, (RSSI: " +
-                wifiManager.getConnectionInfo().getRssi() + ")");
+    public NetworkInfoResponse getConnectionInfo() {
+        NetworkInfoResponse response = new NetworkInfoResponse();
+        response.setSsid(wifiManager.getConnectionInfo().getSSID());
+        response.setLinkSpeed(wifiManager.getConnectionInfo().getLinkSpeed()+" Mbps");
+        response.setRssi(wifiManager.getConnectionInfo().getRssi()+"");
+        return response;
     }
 
     public void removeAllAPs() {

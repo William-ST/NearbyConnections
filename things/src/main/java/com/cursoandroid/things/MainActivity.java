@@ -2,7 +2,6 @@ package com.cursoandroid.things;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -20,6 +19,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
+import com.imgprocesadondk.interaction.NetworkInfoResponse;
+import com.imgprocesadondk.interaction.Response;
 
 import org.json.JSONObject;
 
@@ -145,8 +146,8 @@ public class MainActivity extends Activity {
                     doRemoteAction();
                     break;
                 case ACTION_GET_CURRENT_NETWORK_INFO:
-                    String currentInfoNetworkConnection = wifiutils.getConnectionInfo();
-                    sendData(ACTION_RESPONSE_CURRENT_NETWORK_INFO, currentInfoNetworkConnection);
+                    NetworkInfoResponse networkInfoResponse = wifiutils.getConnectionInfo();
+                    sendData(ACTION_RESPONSE_CURRENT_NETWORK_INFO, networkInfoResponse);
                     break;
                 default:
                     Log.w(TAG, "No existe una acción asociada a este " + "mensaje.");
@@ -180,10 +181,10 @@ public class MainActivity extends Activity {
         wifiutils.getConnectionInfo();
     }
 
-    private void sendData(String endpointId, JSONObject jsonObject) {
+    private void sendData(String endpointId, Response response) {
         Payload data = null;
         try {
-            data = Payload.fromBytes(jsonObject.toString().getBytes("UTF-8"));
+            data = Payload.fromBytes(response.castJSONObject().getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Error en la codificación del mensaje.", e);
         }
