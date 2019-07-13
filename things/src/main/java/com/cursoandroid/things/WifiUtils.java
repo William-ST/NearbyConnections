@@ -22,7 +22,6 @@ public class WifiUtils {
         wifiManager = (WifiManager) context.getSystemService(Context
                 .WIFI_SERVICE);
         wifiConfig = new WifiConfiguration();
-
     }
 
     public void listNetworks() {
@@ -54,7 +53,9 @@ public class WifiUtils {
         WifiManager wifiManager = (WifiManager) context.getSystemService
                 (Context.WIFI_SERVICE);
         for (ScanResult result : wifiManager.getScanResults()) {
+            Log.d(TAG, "result: "+result.SSID);
             if (result.SSID.equals(networkSSID)) {
+                Log.i(TAG, "SSID encontrado!!!");
                 String securityMode = getScanResultSecurity(result);
                 WifiConfiguration wifiConfiguration = createAPConfiguration
                         (networkSSID, networkPasskey, securityMode);
@@ -71,7 +72,7 @@ public class WifiUtils {
                 }
                 return res;
             } else {
-                Log.i(TAG, "SSID no encontrado");
+                //Log.i(TAG, "SSID no encontrado");
             }
         }
         return -1;

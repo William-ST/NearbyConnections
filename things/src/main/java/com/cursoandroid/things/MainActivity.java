@@ -1,6 +1,12 @@
 package com.cursoandroid.things;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,6 +58,7 @@ public class MainActivity extends Activity {
 
     public Gpio mLedGpio;
     private WifiUtils wifiutils;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +74,34 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             Log.e(TAG, "Error en el API PeripheralIO", e);
         }
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final WifiManager wifi = (WifiManager) getSystemService
+                        (Context.WIFI_SERVICE);
+                int state = wifi.getWifiState();
+                if (state != WifiManager.WIFI_STATE_ENABLED) {
+                    Log.e(TAG, "WiFi is not enabled");
+                    return;
+                }
+                wifiutils.connectToAP("MasterAndroidUpv", "android123");
+                wifiutils.listNetworks();
+                wifiutils.getConnectionInfo();
+            }
+        };
         // Arrancamos modo anunciante
         startAdvertising();
+
+        /*
+        Log.d(TAG, "init");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "call doRemoteAction");
+                doRemoteAction();
+            }
+        }, 2000);
+        */
     }
 
     private void startAdvertising() {
@@ -137,7 +170,12 @@ public class MainActivity extends Activity {
                     switchLED(false);
                     break;
                 case REMOTE_ACTION:
-                    doRemoteAction();
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            doRemoteAction();
+                        }
+                    });
                     break;
                 default:
                     Log.w(TAG, "No existe una acción asociada a este " + "mensaje.");
@@ -166,9 +204,8 @@ public class MainActivity extends Activity {
     }
 
     private void doRemoteAction() {
-        wifiutils.connectToAP("PISO 3", "admin");
-        wifiutils.listNetworks();
-        wifiutils.getConnectionInfo();
+        registerReceiver(mReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        Log.d(TAG, "Buscando redes");
     }
 
     /*
@@ -192,6 +229,7 @@ public class MainActivity extends Activity {
                 mLedGpio = null;
             }
         }
+        unregisterReceiver(mReceiver);
     }
 
 }
